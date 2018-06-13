@@ -1,0 +1,22 @@
+{
+  "name": "estacionamiento",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ipelaezitec/estacionamiento.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ipelaezitec/estacionamiento/issues"
+  },
+  "homepage": "https://github.com/ipelaezitec/estacionamiento#readme",
+  "dependencies": {
+    "live-server": "^1.2.0"
+  }
+}
