@@ -1,0 +1,13 @@
+[
+  "autos":[
+    {
+      "patente":"NAC-392",
+      "horaingreso":"19:30",
+
+    }
+  ],
+  "motos":[],
+  "camionetas":[],
+
+]
+// vehiculos.motos.push({});
