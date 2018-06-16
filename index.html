@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="myshit.css">
+  <link rel="stylesheet" href="css/myshit.css">
   <link rel="stylesheet" href="css/bulma.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Passion+One|Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Passion+One|Roboto|Inconsolata" rel="stylesheet">
+  <script src="js/moment.js"></script>
   <title>Document</title>
   
 </head>
@@ -15,46 +16,32 @@
     <header>
       <h1>
         <!-- usar cursor : pointer -->
-        <button type="button" onclick="openDashboard(event)">
-          <em>I&R>G&L</em>
-        </button>
+        <p class="logo" onclick="openDashboard(event)">I&R>G&L</p>
       </h1>
       <!-- <button type="button" onclick="openDashboard()">Menu</button> -->
     </header>
     
-    <section class="section dashboard ">
+    <section class="section">
       <div class="columns is-mobile">
 
         <div class="column">
           <div class="border">
-            <div class="nom-num">
-              Motos
-            </div>
-            <div class="num">
-              8
-            </div>
+            <div class="nom-num">Autos</div>
+            <div class="num num-auto" >0</div>
           </div>
         </div>
 
         <div class="column">
           <div class="border">
-            <div class="nom-num">
-                Autos
-            </div>
-            <div class="num">
-                24
-            </div>
+            <div class="nom-num">Motos</div>
+            <div class="num num-moto">0</div>
           </div>
         </div>
         
         <div class="column">
           <div class="border">
-            <div class="nom-num">
-                Camionetas
-              </div>
-            <div class="num">
-                2
-            </div>
+            <div class="nom-num">Camionetas</div>
+            <div class="num num-camioneta">0</div>
           </div>
         </div>
 
@@ -63,12 +50,14 @@
       <div class="columns">
         <div class="column">
           <div class="border">
-            <p class="total">
-              $ 100000000
-            </p> 
+            <p class="total">$ 0</p> 
           </div>
         </div>
       </div>
+    
+    </section>
+
+    <section class="section dashboard ">
 
       <div class="columns">
         <div class="column">
@@ -83,53 +72,61 @@
     
     <section class="section checkin hidden">
 
-      <form onsubmit="addVehicle(event)">
+      <form onsubmit="saveVehicle(event)">
         <div class="field has-addons">
           <div class="control is-expanded">
             <!-- <input class="input " type="text" pattern="/[A-Z][A-Z][A-Z\\\-][0-9][0-9][0-9]/" title="asd"> -->
-            <input class="input" id="patente" autocomplete="off" placeholder="YYY-XXX" type="text" pattern="[A-Z][A-Z][A-Z][0-9][0-9][0-9]">
+            <input class="input upercase" onkeyup="javascript:this.value=this.value.toUpperCase();" id="patente" autocomplete="off" placeholder="YYYXXX" type="text" pattern="[A-Z][A-Z][A-Z][0-9][0-9][0-9]" required>
           </div>
           <div class="control">
-            <button class="button is-dark" type="submit" required> Registrar </button>
+            <button class="button is-dark" type="submit" required> guardar</button>
           </div>
         </div>
 
         <div class="columns is-mobile">
           <div class="column">
-            <label class="radio" for="1">Auto <input  type="radio" name="tipo" value="auto" id="1" checked> </label>
+            <label class="radio" for="1">Auto <input  class="radio-auto" type="radio" name="tipo" value="auto" id="1" checked required> </label>
           </div>
     
           <div class="column">
-            <label class="radio" for="2">Moto <input  type="radio" name="tipo" value="moto" id="2"> </label>
+            <label class="radio" for="2">Moto <input  class="radio-moto" type="radio" name="tipo" value="moto" id="2"> </label>
           </div>
     
           <div class="column">
-            <label class="radio" for="3">Camioneta<input  type="radio" name="tipo" value="camioneta" id="3"> </label>
+            <label class="radio" for="3">Camioneta<input class="radio-camioneta" type="radio" name="tipo" value="camioneta" id="3"> </label>
           </div>
 
         </div>
       </form>
-      <ul></ul>
-      <ul></ul>
-      <ul></ul>
+      <div class="listas-ul">
+        <h2>AUTOS</h2>
+        <ul id="ul-auto"></ul>
+        <h2>MOTOS</h2>
+        <ul id="ul-moto"></ul>
+        <h2>CAMIONETAS</h2>
+        <ul id="ul-camioneta"></ul>
+      </div>
   
     </section>
     
     <section class="section checkout hidden">
 
-      <form action="registerVehicle()">
+      <form onsubmit="registerVehicle(event)">
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input" type="text">
+            <input class="input upercase"  onkeyup="javascript:this.value=this.value.toUpperCase();"  id="patente-reg" autocomplete="off" placeholder="YYYXXX" type="text"  pattern="[A-Z][A-Z][A-Z][0-9][0-9][0-9]" required>
           </div>
           <div class="control">
-            <button class="button is-outlined" type="button">Registrar</button>
+            <button class="button is-outlined is-danger" type="submit">Registrar/Cobrar</button>
           </div>
         </div>
       </form>
       <!-- deberia abrir modal que te diga cuanto es $$$ por la cantidad de horas   Cancelar | Confirmar -->
+      <div class="listas-ul">
+        <h2> REGISTRO SALIDAS </h2>
+        <ul id="ul-registro"></ul>
+      </div>
     </section>
-    
     
     
  

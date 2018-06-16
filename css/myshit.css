@@ -1,0 +1,90 @@
+
+/** General **/
+header{
+  padding:10px 16px 10px 16px;
+  /* padding-top:10px; */
+  /* padding-bottom: 15px; */
+  background-color: rgb(184, 45, 45);
+}
+
+dashboard{
+  padding-bottom: 5px !important;
+}
+
+.logo{
+  font-family: 'Passion One', cursive;
+  font-size: 30px;
+  color: white;
+  margin-top: 10px; 
+}
+
+.hidden{ display:none; }
+
+
+.border{
+  border: solid black 2px;
+  margin: 1px;
+  border-radius: 5px;
+}
+
+.nom-num{
+  font-family:'Roboto', sans-serif;
+  text-align: center;
+}
+
+.num{
+  font-family: 'Passion One', cursive;
+  text-align: center;
+  font-size: 50px;
+  /* color: black; */
+}
+
+.color-alert{
+  color: orange;
+}
+
+.color-limit{
+  color: red;
+}
+
+.total{
+  text-align: center;
+  font-size: 30px;
+}
+/** Dashboard **/
+
+.btn-custom{
+  font-family:'Roboto', sans-serif;
+  width: 100%;
+  min-height: 80px;
+}
+
+/** Check - in **/
+.upercase{  text-transform: uppercase;}
+
+.listas-ul{
+  margin-top: 40px;
+}
+h2{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  color: aliceblue;
+  background-color: brown;
+  padding: 15px;
+  margin: 10px 0px !important;
+}
+
+.flex-reg{
+  font-family:'Inconsolata', monospace;
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 3px;
+}
+
+.li-reg{
+  background-color: rgb(236, 221, 236); 
+  margin: 5px 0px;
+}
+
+
+
