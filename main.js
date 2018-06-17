@@ -194,7 +194,7 @@ let saveVehicle = (event) =>{
 const registerVehicle = (event) => {
   event.preventDefault();
 
-  let plateInput = document.getElementById("patente-reg").value;
+  let plateInput = document.getElementById("patente-reg");
   let allVehicles = vehiclesArray.vehicles;
   let flag = false;
 
@@ -203,11 +203,17 @@ const registerVehicle = (event) => {
   }else{ 
     for (let index = 0; index < allVehicles.length; index++) {
       const vehicle = allVehicles[index];
-      if (vehicle.patente == plateInput){ 
+      if (vehicle.patente == plateInput.value){ 
         flag = true;
         let tipo       = vehicle.type ;  // necesito el tipo para saber que tarifa cobrar
         let timeOut    = moment().format("H:mm");
-        let dataFormat = {"patente" : plateInput,"type" : tipo, "timeOut" : timeOut};
+        let dataFormat = {"patente" : plateInput.value,"type" : tipo, "timeOut" : timeOut};
+
+        // aca va el modal, si el modal es confirmado , hace lo de abajo, de lo contrario NO
+        // el modal debe : 
+        //                Traer el precio segun el tiempo y el tipo de vehiclo
+
+
         substractCount(dataFormat);
         makeItemReg(dataFormat); 
         vehiclesArray.registerOut.push(dataFormat);
@@ -216,9 +222,8 @@ const registerVehicle = (event) => {
         let liToDelete = document.querySelector(`.${vehicle.patente}`);
         liToDelete.parentElement.remove();
         saveJson();
-        // plateInput="";
-        // console.log(plateInput);
-        // plateInput.focus();
+        plateInput.value="";
+        plateInput.focus();
         break;
       } 
     }
