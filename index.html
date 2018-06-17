@@ -16,12 +16,11 @@
     <header>
       <h1>
         <!-- usar cursor : pointer -->
-        <p class="logo" onclick="openDashboard(event)">I&R>G&L</p>
+        <span class="logo" onclick="openDashboard(event)">I&R>G&L</span>
       </h1>
-      <!-- <button type="button" onclick="openDashboard()">Menu</button> -->
     </header>
     
-    <section class="section">
+    <section class="section-test">
       <div class="columns is-mobile">
 
         <div class="column">
@@ -57,7 +56,7 @@
     
     </section>
 
-    <section class="section dashboard ">
+    <section class="section-test dashboard">
 
       <div class="columns">
         <div class="column">
@@ -70,7 +69,7 @@
   
     </section>
     
-    <section class="section checkin hidden">
+    <section class="section-test checkin hidden">
 
       <form onsubmit="saveVehicle(event)">
         <div class="field has-addons">
@@ -109,17 +108,18 @@
   
     </section>
     
-    <section class="section checkout hidden">
+    <section class="section-test checkout hidden">
 
-      <form onsubmit="registerVehicle(event)">
+      <form  onsubmit="registerVehicle(event)">
         <div class="field has-addons">
           <div class="control is-expanded">
             <input class="input upercase"  onkeyup="javascript:this.value=this.value.toUpperCase();"  id="patente-reg" autocomplete="off" placeholder="YYYXXX" type="text"  pattern="[A-Z][A-Z][A-Z][0-9][0-9][0-9]" required>
           </div>
           <div class="control">
-            <button class="button is-outlined is-danger" type="submit">Registrar/Cobrar</button>
+            <button class="button is-dark" type="submit">Registrar/Cobrar</button>
           </div>
         </div>
+        <div class="notification is-warning notification-registro is-small hidden"></div>
       </form>
       <!-- deberia abrir modal que te diga cuanto es $$$ por la cantidad de horas   Cancelar | Confirmar -->
       <div class="listas-ul">

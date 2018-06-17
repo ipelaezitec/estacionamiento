@@ -7,15 +7,17 @@ header{
   background-color: rgb(184, 45, 45);
 }
 
-dashboard{
-  padding-bottom: 5px !important;
+.section-test{
+  padding: 15px;
+  margin: 10px 5px;
 }
 
 .logo{
   font-family: 'Passion One', cursive;
-  font-size: 30px;
+  font-size: 40px;
   color: white;
   margin-top: 10px; 
+  cursor: pointer;
 }
 
 .hidden{ display:none; }
@@ -51,6 +53,9 @@ dashboard{
   text-align: center;
   font-size: 30px;
 }
+
+
+
 /** Dashboard **/
 
 .btn-custom{
@@ -62,8 +67,9 @@ dashboard{
 /** Check - in **/
 .upercase{  text-transform: uppercase;}
 
+
 .listas-ul{
-  margin-top: 40px;
+  margin-top: 10px;
 }
 h2{
   text-align: center;
