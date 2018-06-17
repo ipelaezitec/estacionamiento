@@ -1,8 +1,8 @@
-// DUDA //** la lista de elementos tiene que ser solo de los vehiculos que estan en el momento?  eso implicaria quitar el vehiculo de la lista, el registro en cambio seria siempre igual*/
-// DUDA  buscar 'xjfw2' : puedo llamar una función sin recibir lo que retorna?
+
+// DUDA  buscar 'xjfw2' : puedo llamar una función sin recibir lo que retorna? (EJEMPLO : renderCount)
+// DUDA variables const y let
 
 // LOG: el required en las etiquetas radio no funcionó, solucionar la experiencia usuario
-// duda , variables const y let
 
 const dashboard = document.querySelector(".dashboard");
 const checkin = document.querySelector(".checkin");
@@ -18,48 +18,33 @@ let camionetaLimit = 4;
 
 let alertLimit = 2;
 
-
 let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[]};
 
-let openDashboard = (event) =>{
+let openBoard = (event,boardItem) =>{
   event.preventDefault();
-  
-  checkin.classList.add('hidden');
-  checkout.classList.add('hidden');
-  dashboard.classList.remove('hidden');
-}
-
-let openCheckin = (event) =>{
-  event.preventDefault();
-
-  checkin.classList.remove('hidden');
+  checkin.classList.add('hidden'); 
   dashboard.classList.add('hidden');
+  checkout.classList.add('hidden');  
+  eval(`${boardItem}`).classList.remove('hidden');
 }
-
-let openCheckout = (event) =>{
-  event.preventDefault();
-
-  checkout.classList.remove('hidden');
-  dashboard.classList.add('hidden');
-}
-
 
 const saveJson = () => {
   localStorage.setItem('vehicles', JSON.stringify(vehiclesArray)); 
 }
 
-let renderCount = (elementNum) =>{
+//** Controla el número renderizado ( el contador y color ) */
+let renderCount = (elementNum,counter=1,) =>{
   let number =  document.querySelector(`.num-${elementNum.type}`);
   let radio =  document.querySelector(`.radio-${elementNum.type}`);
-  let numberParsed = parseInt(number.innerHTML)+1;
+  let numberParsed = parseInt(number.innerHTML)+counter;
   let limite = eval(`${elementNum.type}Limit`);
 
-  let pushItemFlag = false; 
+  let pushItemFlag = false; // addvehicle necesita este flag para saber si debe agregar value al Json 
 
+  /** Cambia color si esta cerca del limite especificado. */
   if (numberParsed <= limite ) {
     number.innerHTML = numberParsed;
     pushItemFlag = true;
-    
     let remainingSpace = Math.abs(numberParsed - limite);
     if ( remainingSpace <= alertLimit) {
       number.classList.add("color-alert");
@@ -67,91 +52,33 @@ let renderCount = (elementNum) =>{
       number.classList.remove("color-alert");
     }
   }
-
   /** Cambia el color si está en el limite */
-  if (numberParsed +1 > limite) {
+  if (numberParsed + counter > limite) {
     number.classList.add("color-limit");
     radio.classList.add("hidden");
   }else{
     radio.classList.remove("hidden"); // esto o :  radio.disabled = false; deberia probar radio.checked = false (ni idea si funciona)
+    number.classList.remove("color-limit");
   }
-  
   return pushItemFlag;
 }
 
-let substractCount = (elementNum) =>{
-    
-  let number =  document.querySelector(`.num-${elementNum.type}`);
-  // let radio =  document.querySelector(`.radio-${elementNum.type}`);
-  let numberParsed = parseInt(number.innerHTML)-1; // to -1
-  let limite = eval(`${elementNum.type}Limit`);
-
-  // let pushItemFlag = false; 
-
-  
-  if (numberParsed <= limite ) {
-    number.innerHTML = numberParsed;
-    // pushItemFlag = true;
-    
-    let remainingSpace = Math.abs(numberParsed - limite);
-    if ( remainingSpace <= alertLimit) {
-      number.classList.add("color-alert");
-    }else{
-      number.classList.remove("color-alert");
-    }
-  }
-
-  /** Cambia el color está en el limite */
-  if (numberParsed +1 > limite) {
-    // number.classList.remove("color-alert"); // cuando libere espacios capaz que haga falta
-    number.classList.add("color-limit");
-    radio.classList.add("hidden");
-  }else{
-    // radio.classList.remove("hidden"); // esto o :  radio.disabled = false; deberia probar radio.checked = false (ni idea si funciona)
-    number.classList.remove("color-limit");
-  }
-  
-  
-  // return pushItemFlag;
-  return ;
-
-}
-
-const makeItem = (element) =>{
+//** Solo crea el <li> y lo agrega al <ul> */
+const makeItem = (element, register=false) =>{
   // Ordenados por jerarquia */
-  const listUl   = document.getElementById(`ul-${element.type}`);
+  const listUl   =  register ? document.getElementById('ul-registro') : document.getElementById(`ul-${element.type}`);
   const flex      = document.createElement('div');
   const vehicleLi= document.createElement('li');
   const plateP  = document.createElement('p');
   const hourP     = document.createElement('p');
 
   vehicleLi.className = "li-reg";
-  flex.className = `flex-reg ${element.patente}`; 
+  flex.className = register ?  "flex-reg" : `flex-reg ${element.patente}`; 
 
   plateP.appendChild(document.createTextNode(element.patente));
-  hourP.appendChild(document.createTextNode(element.timeIn));  
-  flex.appendChild(plateP); 
-  flex.appendChild(hourP); 
-  vehicleLi.appendChild(flex); 
-  listUl.appendChild(vehicleLi); 
-  
-  return
-}
 
-const makeItemReg = (element) =>{
-
-  // Ordenados por jerarquia */
-  const listUl   = document.getElementById('ul-registro'); // esto cambió
-  const flex      = document.createElement('div');
-  const vehicleLi= document.createElement('li');
-  const plateP  = document.createElement('p');
-  const hourP     = document.createElement('p');
-
-  vehicleLi.className = "li-reg";
-  flex.className = "flex-reg";
-
-  plateP.appendChild(document.createTextNode(element.patente));
-  hourP.appendChild(document.createTextNode(element.timeOut)); // esto cambió  
+  getTimeTypeNode = register ? document.createTextNode(element.timeOut) : document.createTextNode(element.timeIn);
+  hourP.appendChild(getTimeTypeNode);  
   flex.appendChild(plateP); 
   flex.appendChild(hourP); 
   vehicleLi.appendChild(flex); 
@@ -163,12 +90,13 @@ const makeItemReg = (element) =>{
 const alertMsj = (patente) =>{
   let msj = document.querySelector(".notification-registro");
   msj.classList.remove("hidden");
-  msj.innerHTML=`${patente} no está registrado`;
+  msj.innerHTML=`${patente} no está registrado en el ingreso`;
   setTimeout(function(){
   msj.classList.add("hidden");
   },
-  5000);
+  6000);
 }
+
 
 let saveVehicle = (event) =>{
   event.preventDefault();
@@ -199,7 +127,7 @@ const registerVehicle = (event) => {
   let flag = false;
 
   if  (allVehicles.length == 0){
-    alertMsj(plateInput);
+    alertMsj(plateInput.value);
   }else{ 
     for (let index = 0; index < allVehicles.length; index++) {
       const vehicle = allVehicles[index];
@@ -214,8 +142,8 @@ const registerVehicle = (event) => {
         //                Traer el precio segun el tiempo y el tipo de vehiclo
 
 
-        substractCount(dataFormat);
-        makeItemReg(dataFormat); 
+        renderCount(dataFormat,-1);
+        makeItem(dataFormat,true); 
         vehiclesArray.registerOut.push(dataFormat);
         allVehicles.splice(index,1);
     
@@ -229,7 +157,7 @@ const registerVehicle = (event) => {
     }
   }
   
-  if (!flag){ alertMsj(plateInput); }
+  if (!flag){ alertMsj(plateInput.value); }
 
 }
 
@@ -239,7 +167,7 @@ let initializeJsonData = () =>{
     makeItem(itemJson);
   });
   vehiclesArray.registerOut.forEach(regJson =>{
-    makeItemReg(regJson);
+    makeItem(regJson,true);
   });
 }
 

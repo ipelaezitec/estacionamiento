@@ -16,7 +16,7 @@
     <header>
       <h1>
         <!-- usar cursor : pointer -->
-        <span class="logo" onclick="openDashboard(event)">I&R>G&L</span>
+        <span class="logo" onclick="openBoard(event,'dashboard')">I&R>G&L</span>
       </h1>
     </header>
     
@@ -60,10 +60,10 @@
 
       <div class="columns">
         <div class="column">
-          <button class="button btn-custom is-dark" type="button" onclick="openCheckin(event)">Ingreso</button>
+          <button class="button btn-custom is-dark" type="button" onclick="openBoard(event,'checkin')">Ingreso</button>
         </div>
         <div class="column">
-          <button class="button btn-custom is-dark" type="button" onclick="openCheckout(event)">Salida</button>
+          <button class="button btn-custom is-dark" type="button" onclick="openBoard(event,'checkout')">Salida</button>
         </div>
       </div> 
   
