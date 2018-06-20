@@ -14,10 +14,22 @@
 <body>
   
     <header>
-      <h1>
-        <!-- usar cursor : pointer -->
-        <span class="logo" onclick="openBoard(event,'dashboard')">I&R>G&L</span>
-      </h1>
+        <!-- <div class="flex"> -->
+          
+          <nav class="navbar" role="navigation" aria-label="main navigation" >
+            <div class="navbar-brand">
+              <span class="logo" onclick="openBoard(event,'dashboard')">I&R>G&L</span>
+              <a role="button" class="navbar-burger color-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="false"></span>
+                <span aria-hidden="false"></span>
+                <span aria-hidden="false"></span>
+              </a>
+            </div>
+            
+          </nav>
+
+        <!-- </div> -->
+
     </header>
     
     <section class="section-test">
@@ -49,7 +61,7 @@
       <div class="columns">
         <div class="column">
           <div class="border">
-            <p class="total">$ 0</p> 
+            <p class="total">$<span class="number-total">0</span></p> 
           </div>
         </div>
       </div>
@@ -81,6 +93,8 @@
             <button class="button is-dark" type="submit" required> guardar</button>
           </div>
         </div>
+        
+        <div class="notification is-warning notification-registro is-small hidden"></div>
 
         <div class="columns is-mobile">
           <div class="column">
@@ -127,6 +141,34 @@
         <ul id="ul-registro"></ul>
       </div>
     </section>
+
+    <div class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Cobrar y Registrar</p>
+            <!-- <button class="delete" aria-label="close"></button> -->
+          </header>
+          <section class="modal-card-body">
+            <p class="color-limit text-modal text-plate-modal">
+              PATENTE
+            </p>
+            <p class="text-modal text-money-modal">
+              $XXX
+            </p> 
+
+          </section>
+          <footer class="modal-card-foot">
+            <button onclick='hideModal()' class="button is-large">Cancelar</button>
+            <button onclick='confirmButtonModalRegister()' class="button  is-success is-large">Confirmar</button>
+          </footer>
+        </div>
+
+      </div>
+      <!-- <button onclick='hideModal()' class="modal-close is-large" aria-label="close"></button> -->
+    </div>
     
     
  

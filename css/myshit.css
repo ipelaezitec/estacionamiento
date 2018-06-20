@@ -6,6 +6,14 @@ header{
   /* padding-bottom: 15px; */
   background-color: rgb(184, 45, 45);
 }
+.navbar{
+  background-color: rgb(184, 45, 45) !important;
+}
+.color-burger{
+  /* background-color: rgb(179, 55, 55) !important; */
+  color: white !important;
+  margin-top: 0.7rem;
+}
 
 .section-test{
   padding: 15px;
@@ -15,6 +23,7 @@ header{
 .logo{
   font-family: 'Passion One', cursive;
   font-size: 40px;
+  /* color: white; */
   color: white;
   margin-top: 10px; 
   cursor: pointer;
@@ -85,11 +94,21 @@ h2{
   display: flex;
   justify-content: space-between;
   letter-spacing: 3px;
+  
 }
 
 .li-reg{
   background-color: rgb(236, 221, 236); 
   margin: 5px 0px;
+}
+
+/* modal */
+
+.text-modal{
+  text-align: center;
+  font-family:'Inconsolata', monospace;
+  letter-spacing: 2px;
+  font-size: 40px;
 }
 
 
