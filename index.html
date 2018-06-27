@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/myshit.css">
   <link rel="stylesheet" href="css/bulma.min.css">
   <link href="https://fonts.googleapis.com/css?family=Passion+One|Roboto|Inconsolata" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
   <script src="js/moment.js"></script>
   <title>Document</title>
   
@@ -14,24 +15,21 @@
 <body>
   
     <header>
-        <!-- <div class="flex"> -->
-          
-          <nav class="navbar" role="navigation" aria-label="main navigation" >
-            <div class="navbar-brand">
-              <span class="logo" onclick="openBoard(event,'dashboard')">I&R>G&L</span>
-              <a role="button" class="navbar-burger color-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="false"></span>
-                <span aria-hidden="false"></span>
-                <span aria-hidden="false"></span>
-              </a>
-            </div>
-            
-          </nav>
+      <div class="level is-mobile">
+        <level class="left">
+          <span class="logo " onclick="openBoard(event,'dashboard')">I&R>G&L</span>
+        </level>
+        <level class="rigth">
+          <div class="level-item">
+            <i onclick="openBoard(event,'config')" class="fas fa-cog config-custom"></i>
+          </div>
+        </level>
 
-        <!-- </div> -->
+      </div>
 
     </header>
     
+    <!-- Contadores, siempre estan -->
     <section class="section-test">
       <div class="columns is-mobile">
 
@@ -68,6 +66,7 @@
     
     </section>
 
+    <!-- Botones del main -->
     <section class="section-test dashboard">
 
       <div class="columns">
@@ -81,6 +80,106 @@
   
     </section>
     
+    <!-- Configuración -->
+    <section class="section-test config hidden">
+        
+        <h3 class="title"> Configuración Precios</h2>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Auto </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Moto </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Camioneta </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+        <h3 class="title"> Configuración Espacios</h2>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Auto </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Moto </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+        <div class="level is-mobile">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="lavbel">Precio Camioneta </div>
+            </div>
+          </div>
+          <div class="level-rigth">
+            <div class="level-item">
+                <input class="input" type="text" placeholder="$ ">
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="field has-addons">
+            <label class="label config-label-custom">Precio Camioneta</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="$ ">
+            </div>
+        </div> -->
+        <div class="prueba202">
+              <button class="button is-dark"> Guardar Cambios </button>
+        </div>
+
+    </section>
+  
+
+    <!-- Ingreso -->
     <section class="section-test checkin hidden">
 
       <form onsubmit="saveVehicle(event)">
@@ -122,6 +221,7 @@
   
     </section>
     
+    <!-- Registro Salida-->
     <section class="section-test checkout hidden">
 
       <form  onsubmit="registerVehicle(event)">
@@ -167,7 +267,6 @@
         </div>
 
       </div>
-      <!-- <button onclick='hideModal()' class="modal-close is-large" aria-label="close"></button> -->
     </div>
     
     

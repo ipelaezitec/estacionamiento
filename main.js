@@ -1,17 +1,21 @@
 
-// DUDA  buscar 'xjfw2' : puedo llamar una función sin recibir lo que retorna? (EJEMPLO : renderCount)
+// DUDA JavaScript no se queja si no guardar el return de una función, es mala práctica?
 // DUDA variables const y let
 // DUDA la plata total no se guarda porque no lo puse, deberia?
 // DUDA tratar el asunto de los radios
-// posibles mejoras : mascara de caracteres
+// posible mejora : mascara de caracteres
+// posible mejora : Pestañas en vez de botones. 
 
 
 // TODO : ESTABLECER PRECIOS;
-// no patentes repetidas + mensaje error
+
+let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[]};
+
 
 const dashboard = document.querySelector(".dashboard");
 const checkin = document.querySelector(".checkin");
 const checkout = document.querySelector(".checkout");
+const config = document.querySelector(".config");
 const modalDOM = document.querySelector('.modal');
 
 let motoPrice = 80;
@@ -25,21 +29,22 @@ let camionetaLimit = 4;
 
 let alertLimit = 2;
 
-/// WIP
+/// Variables modal, deben ser globales si o si.
 let totalMoney;
 let dataFormatOutJson;
 let auxIndex;
 let plateInputReg = document.getElementById("patente-reg");
-/// END WIP 
 
 
-let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[]};
 
+/** Switcher entre boards */
 let openBoard = (event,boardItem) =>{
   event.preventDefault();
   checkin.classList.add('hidden'); 
   dashboard.classList.add('hidden');
   checkout.classList.add('hidden');  
+  config.classList.add('hidden');
+  
   eval(`${boardItem}`).classList.remove('hidden');
 }
 
@@ -49,13 +54,12 @@ const showModal = () =>{ modalDOM.classList.add("is-active");}
 
 const saveJson = () => { localStorage.setItem('vehicles', JSON.stringify(vehiclesArray));}
 
-//** Controla el número renderizado ( el contador y color ) */
+/** Controla el número renderizado ( el contador y color ) */
 let renderCount = (elementNum,counter=1,) =>{
   let number =  document.querySelector(`.num-${elementNum.type}`);
   let radio =  document.querySelector(`.radio-${elementNum.type}`);
   let numberParsed = parseInt(number.innerHTML)+counter;
   let limite = eval(`${elementNum.type}Limit`);
-
   let pushItemFlag = false; // addvehicle necesita este flag para saber si debe agregar value al Json 
 
   /** Cambia color si esta cerca del limite especificado. */
@@ -80,7 +84,7 @@ let renderCount = (elementNum,counter=1,) =>{
   return pushItemFlag;
 }
 
-//** Solo crea el <li> y lo agrega al <ul> */
+/** Solo crea el <li> y lo agrega al <ul> */
 const makeItem = (element, register=false) =>{
   // Ordenados por jerarquia */
   const listUl   =  register ? document.getElementById('ul-registro') : document.getElementById(`ul-${element.type}`);
@@ -104,7 +108,7 @@ const makeItem = (element, register=false) =>{
   return
 }
 
-
+/** Simplemente una alerta de error  */
 const alertMsj = (patente,text) =>{
   console.log("check,borrame");
 
@@ -117,7 +121,7 @@ const alertMsj = (patente,text) =>{
   6000);
 }
 
-
+/** Verifica si la placa ya existe */
 let checkPlate = (plateInput) => {
   let plateExistFlag = true;
   for (let i = 0; i < vehiclesArray.vehicles.length; i++) {
@@ -133,12 +137,11 @@ let checkPlate = (plateInput) => {
   return plateExistFlag;
 }
 
+/** Function activada por el boton de "Guardar" en el Ingreso de vehiculo */
 let saveVehicle = (event) =>{
   event.preventDefault();
 
-
-  let plateInput = document.getElementById("patente"); // TODO : BAJA PRIORIDAD -> consultar que la patente no este en la base de datos
-
+  let plateInput = document.getElementById("patente"); 
 
   if (checkPlate(plateInput.value)){
     let radioInput = document.querySelector('input[name=tipo]:checked').value;
@@ -160,13 +163,14 @@ let saveVehicle = (event) =>{
   plateInput.focus();
 }
 
-//////////////////// WIP 
+/** Calcula la cantidad de dinero según el tiempo*/
 const getTotalMoney = (timeIn,timeOut,type) =>{
-  /* moment.js */
+  /* moment.js  Revisar <- */
   let start = moment.duration(timeIn, "HH:mm");
   let end = moment.duration(timeOut, "HH:mm");
   let diff = end.subtract(start);
 
+  // supuestamente pretende redondear para cobrar
   let hours = diff.hours();
   if (diff.minutes() < 31){
     hours = hours+0.5;
@@ -181,6 +185,7 @@ const getTotalMoney = (timeIn,timeOut,type) =>{
   return totalMoney;
 }
 
+/** Carga la información que se registará en caso de Confirmar, <<Incluye>> mostrar datos en el modal */
 const chargeAndShowModal = (dataJson) =>{
   showModal();
   textPlate = document.querySelector('.text-plate-modal');
@@ -191,14 +196,16 @@ const chargeAndShowModal = (dataJson) =>{
   textMoney.innerHTML = "$ "+totalMoney;
 }
 
+/** Evento al apretar para la salida de vehiculo.  */
 const registerVehicle = (event) => {
   event.preventDefault();
 
   let allVehiclesJson = vehiclesArray.vehicles;
   let flag = false;
 
+
   if  (allVehiclesJson.length == 0){
-    alertMsj(plateInputReg.value,"no está registrado en el ingreso");
+    alertMsj(plateInputReg.value," no está registrado en el ingreso");
   }else{ 
     for (let index = 0; index < allVehiclesJson.length; index++) {
       const vehicle = allVehiclesJson[index];
@@ -214,9 +221,9 @@ const registerVehicle = (event) => {
                             "timeIn":timeIn};
         auxIndex= index;
         
+        // despues de encontrar y guardar datos de salida del vehiculo,cargará el modal.
+        // luego el "Confirmar" decidirá si la información es registrada o no.
         chargeAndShowModal(dataFormatOutJson);
-        // chargeModal = 
-        // aca estaba el  deleteAndRegisterItem();
         break;
       } 
     }
@@ -224,7 +231,7 @@ const registerVehicle = (event) => {
   if (!flag){ alertMsj(plateInputReg.value,"no está registrado en el ingreso"); }
 }
 
-
+/** Botón confirmar */
 let confirmButtonModalRegister= () =>{
   deleteAndRegisterItem(dataFormatOutJson);
   let totalDOM = document.querySelector('.number-total');
@@ -235,9 +242,7 @@ let confirmButtonModalRegister= () =>{
   hideModal();
 }
 
-// guarde el cobro
-// guarde en el json el plate y el time out , el in y el type
-
+/** Borra y Actualiza los datos de renderizado y del localStorage */
 let deleteAndRegisterItem = () =>{
   renderCount(dataFormatOutJson,-1);
   makeItem(dataFormatOutJson,true); 
@@ -253,6 +258,7 @@ let deleteAndRegisterItem = () =>{
   plateInputReg.focus();
 }
 
+/** Se ejecuta al principio para re crear los datos en la local storage */
 let initializeJsonData = () =>{
   vehiclesArray.vehicles.forEach(itemJson => {
     renderCount(itemJson); // xjfw2
@@ -262,3 +268,5 @@ let initializeJsonData = () =>{
 }
 
 initializeJsonData();
+
+
