@@ -83,17 +83,18 @@
     <!-- Configuración -->
     <section class="section-test config hidden">
         
-        <h3 class="title"> Configuración Precios</h2>
+      <h3 class="title"> Configuración Precios</h2>
+      <form onsubmit='saveConfig(event)'>
 
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Auto </div>
+              <div class="label">Precio Auto </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text" placeholder="$ ">
             </div>
           </div>
         </div>
@@ -101,12 +102,12 @@
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Moto </div>
+              <div class="label">Precio Moto </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text" placeholder="$ ">
             </div>
           </div>
         </div>
@@ -114,12 +115,12 @@
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Camioneta </div>
+              <div class="label">Precio Camioneta </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text" placeholder="$ ">
             </div>
           </div>
         </div>
@@ -129,12 +130,12 @@
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Auto </div>
+              <div class="label">Espacios Auto </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text">
             </div>
           </div>
         </div>
@@ -142,12 +143,12 @@
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Moto </div>
+              <div class="label">Espacios Moto </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text">
             </div>
           </div>
         </div>
@@ -155,12 +156,12 @@
         <div class="level is-mobile">
           <div class="level-left">
             <div class="level-item">
-              <div class="lavbel">Precio Camioneta </div>
+              <div class="label">Espacios Camioneta </div>
             </div>
           </div>
           <div class="level-rigth">
             <div class="level-item">
-                <input class="input" type="text" placeholder="$ ">
+                <input class="input config-inputs" type="text">
             </div>
           </div>
         </div>
@@ -175,6 +176,8 @@
         <div class="prueba202">
               <button class="button is-dark"> Guardar Cambios </button>
         </div>
+
+      </form>
 
     </section>
   

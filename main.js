@@ -9,7 +9,14 @@
 
 // TODO : ESTABLECER PRECIOS;
 
-let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[]};
+let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[],"money": "0",
+"config" : {'motoPrice' : 1 ,
+            'autoPrice' : 1 ,
+            'camionetaPrice' : 1 ,
+            'motoLimit' : 1 ,
+            'autoLimit' : 1 ,
+            'camionetaLimit' : 1 ,
+            'alertLimit' : 1}};
 
 
 const dashboard = document.querySelector(".dashboard");
@@ -18,10 +25,13 @@ const checkout = document.querySelector(".checkout");
 const config = document.querySelector(".config");
 const modalDOM = document.querySelector('.modal');
 
+
+
+let cfg = vehiclesArray.config;
+
 let motoPrice = 80;
 let autoPrice = 100;
 let camionetaPrice = 120;
-let TotalMoney = 0 ;
 
 let motoLimit = 6;
 let autoLimit = 10;
@@ -35,7 +45,7 @@ let dataFormatOutJson;
 let auxIndex;
 let plateInputReg = document.getElementById("patente-reg");
 
-
+let totalDOM = document.querySelector('.number-total'); // added
 
 /** Switcher entre boards */
 let openBoard = (event,boardItem) =>{
@@ -83,6 +93,7 @@ let renderCount = (elementNum,counter=1,) =>{
   }
   return pushItemFlag;
 }
+
 
 /** Solo crea el <li> y lo agrega al <ul> */
 const makeItem = (element, register=false) =>{
@@ -234,11 +245,12 @@ const registerVehicle = (event) => {
 /** Botón confirmar */
 let confirmButtonModalRegister= () =>{
   deleteAndRegisterItem(dataFormatOutJson);
-  let totalDOM = document.querySelector('.number-total');
-  console.log(totalDOM);
+  // let totalDOM = document.querySelector('.number-total');
   numParsed = parseInt(totalDOM.innerHTML)+totalMoney;
-  console.log(numParsed);
   totalDOM.innerHTML = numParsed;
+  vehiclesArray.money= numParsed;
+  saveJson();
+
   hideModal();
 }
 
@@ -265,6 +277,7 @@ let initializeJsonData = () =>{
     makeItem(itemJson);
   });
   vehiclesArray.registerOut.forEach(regJson =>{ makeItem(regJson,true); });
+  totalDOM.innerHTML = vehiclesArray.money;
 }
 
 initializeJsonData();
