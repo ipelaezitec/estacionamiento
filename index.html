@@ -17,7 +17,8 @@
     <header>
       <div class="level is-mobile">
         <level class="left">
-          <span class="logo " onclick="openBoard(event,'dashboard')">I&R>G&L</span>
+          <!-- <span class="logo " onclick="openBoard(event,'dashboard')">I&R>G&L</span> -->
+          <span class="logo " onclick="configBoard(event)">I&R>G&L</span>
         </level>
         <level class="rigth">
           <div class="level-item">
@@ -68,6 +69,11 @@
 
     <!-- Botones del main -->
     <section class="section-test dashboard">
+      <div class="field">
+        <div class="control">
+          <div class="notification is-success notification-ok is-small hidden"></div>
+        </div>
+      </div>
 
       <div class="columns">
         <div class="column">
@@ -84,6 +90,13 @@
     <section class="section-test config hidden">
         
       <h3 class="title"> Configuración Precios</h2>
+
+      <div class="field">
+          <div class="control">
+              <div class="notification is-danger notificacion-error is-small hidden"></div>
+          </div>
+      </div>
+
       <form onsubmit='saveConfig(event)'>
 
         <div class="level is-mobile">
@@ -173,9 +186,14 @@
               <input class="input" type="text" placeholder="$ ">
             </div>
         </div> -->
-        <div class="prueba202">
-              <button class="button is-dark"> Guardar Cambios </button>
+        <div class="field">
+          <div class="control">
+            <div class="prueba202">
+                  <button class="button is-dark"> Guardar cambios y Recargar </button>
+            </div>
+          </div>
         </div>
+
 
       </form>
 
@@ -196,7 +214,7 @@
           </div>
         </div>
         
-        <div class="notification is-warning notification-registro is-small hidden"></div>
+        <div class="notification is-warning notification-regin is-small hidden"></div>
 
         <div class="columns is-mobile">
           <div class="column">
@@ -207,7 +225,7 @@
             <label class="radio" for="2">Moto <input  class="radio-moto" type="radio" name="tipo" value="moto" id="2"> </label>
           </div>
     
-          <div class="column">
+          <div class="column is-narrow">
             <label class="radio" for="3">Camioneta<input class="radio-camioneta" type="radio" name="tipo" value="camioneta" id="3"> </label>
           </div>
 
@@ -236,9 +254,13 @@
             <button class="button is-dark" type="submit">Registrar/Cobrar</button>
           </div>
         </div>
-        <div class="notification is-warning notification-registro is-small hidden"></div>
+        <div class="field">
+          <div class="control">
+            <div class="notification is-warning notification-regout is-small hidden"></div>
+          </div>
+        </div>
       </form>
-      <!-- deberia abrir modal que te diga cuanto es $$$ por la cantidad de horas   Cancelar | Confirmar -->
+
       <div class="listas-ul">
         <h2> REGISTRO SALIDAS </h2>
         <ul id="ul-registro"></ul>

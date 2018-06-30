@@ -10,13 +10,14 @@
 // TODO : ESTABLECER PRECIOS;
 
 let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[],"money": "0",
-"config" : {'motoPrice' : 1 ,
-            'autoPrice' : 1 ,
-            'camionetaPrice' : 1 ,
-            'motoLimit' : 1 ,
-            'autoLimit' : 1 ,
-            'camionetaLimit' : 1 ,
-            'alertLimit' : 1}};
+"config" : {'motoPrice' : '80' ,
+            'autoPrice' : '100' ,
+            'camionetaPrice' : '120' ,
+            'motoLimit' : '6' ,
+            'autoLimit' : '8' ,
+            'camionetaLimit' : '4' ,
+            'alertLimit' : '2'}};
+
 
 
 const dashboard = document.querySelector(".dashboard");
@@ -25,19 +26,20 @@ const checkout = document.querySelector(".checkout");
 const config = document.querySelector(".config");
 const modalDOM = document.querySelector('.modal');
 
-
+// wip
+let configFormArray = document.querySelectorAll('.config-inputs');
 
 let cfg = vehiclesArray.config;
+let autoPrice = cfg.autoPrice;
+let motoPrice = cfg.motoPrice;
+let camionetaPrice = cfg.camionetaPrice;
 
-let motoPrice = 80;
-let autoPrice = 100;
-let camionetaPrice = 120;
+let autoLimit = cfg.autoLimit;
+let motoLimit = cfg.motoLimit;
+let camionetaLimit = cfg.autoLimit;
 
-let motoLimit = 6;
-let autoLimit = 10;
-let camionetaLimit = 4;
+let alertLimit = cfg.alertLimit;
 
-let alertLimit = 2;
 
 /// Variables modal, deben ser globales si o si.
 let totalMoney;
@@ -120,17 +122,54 @@ const makeItem = (element, register=false) =>{
 }
 
 /** Simplemente una alerta de error  */
-const alertMsj = (patente,text) =>{
-  console.log("check,borrame");
 
-  let msj = document.querySelector(".notification-registro");
+const alertMsjOut = (patente,text) =>{
+  let msj = document.querySelector(".notification-regout");
   msj.classList.remove("hidden");
   msj.innerHTML=`${patente} ${text}`;
+  let timeDisappear = 3000;
   setTimeout(function(){
   msj.classList.add("hidden");
   },
-  6000);
+  timeDisappear);
 }
+
+const alertMsj = (patente,text) =>{
+  let msj = document.querySelector(".notification-regin");
+  msj.classList.remove("hidden");
+  msj.innerHTML=`${patente} ${text}`;
+  let timeDisappear = 4000;
+  setTimeout(function(){
+  msj.classList.add("hidden");
+  },
+  timeDisappear);
+}
+
+const alertErrorMsj = (text) => {
+
+  let msj = document.querySelector(".notificacion-error");
+  msj.classList.remove("hidden");
+  msj.innerHTML=`${text}`;
+  let timeDisappear = 4000;
+  setTimeout(function(){
+  msj.classList.add("hidden");
+  },
+  timeDisappear);
+}
+
+const alertSucessMsj = (text) => {
+  console.log("checkeo de sucess");
+  let msj = document.querySelector(".notificacion-ok");
+  msj.classList.remove("hidden");
+  msj.innerHTML=`${text}`;
+  let timeDisappear = 4000;
+  setTimeout(function(){
+  msj.classList.add("hidden");
+  },
+  timeDisappear);
+}
+
+
 
 /** Verifica si la placa ya existe */
 let checkPlate = (plateInput) => {
@@ -165,13 +204,17 @@ let saveVehicle = (event) =>{
       makeItem(dataFormatIn);
       vehiclesArray.vehicles.push(dataFormatIn);
       saveJson();
+
+      plateInput.value="";
+      plateInput.focus();
+    }else{
+      alertMsj(" ","Debe seleccionar tipo de vehículo.")
     }
   }else{
     alertMsj(plateInput.value,"Ya está en la lista.");
   }
 
-  plateInput.value="";
-  plateInput.focus();
+
 }
 
 /** Calcula la cantidad de dinero según el tiempo*/
@@ -190,8 +233,6 @@ const getTotalMoney = (timeIn,timeOut,type) =>{
   }
   
   totalMoney = hours * eval(`${type}Price`);
-  console.log("en testing  hours :"+hours);
-  console.log("en testing  totalMoney :"+totalMoney);
 
   return totalMoney;
 }
@@ -216,7 +257,7 @@ const registerVehicle = (event) => {
 
 
   if  (allVehiclesJson.length == 0){
-    alertMsj(plateInputReg.value," no está registrado en el ingreso");
+    alertMsjOut(plateInputReg.value," no está registrado en el ingreso");
   }else{ 
     for (let index = 0; index < allVehiclesJson.length; index++) {
       const vehicle = allVehiclesJson[index];
@@ -239,7 +280,7 @@ const registerVehicle = (event) => {
       } 
     }
   }
-  if (!flag){ alertMsj(plateInputReg.value,"no está registrado en el ingreso"); }
+  if (!flag){ alertMsjOut(plateInputReg.value,"no está registrado en el ingreso"); }
 }
 
 /** Botón confirmar */
@@ -270,6 +311,63 @@ let deleteAndRegisterItem = () =>{
   plateInputReg.focus();
 }
 
+
+const numberControl = () =>{
+  flagError = true;
+  for (let i = 0; i < configFormArray.length; i++) {
+    const elementInput = (configFormArray[i].value);
+    if (elementInput < 0){
+      flagError = false;
+    }
+    if (isNaN(elementInput)){
+      flagError = false;
+    }
+    console.log(Number.isInteger(Number(elementInput)));
+    if (!Number.isInteger(Number(elementInput))){
+      flagError = false;
+    }
+  }
+
+  return flagError;
+}
+
+const saveConfig = () =>{
+  event.preventDefault();
+  if (numberControl()){
+    cfg.autoPrice = configFormArray[0].value;
+    cfg.motoPrice = configFormArray[1].value;
+    cfg.camionetaPrice = configFormArray[2].value;
+    cfg.autoLimit = configFormArray[3].value;
+    cfg.motoLimit = configFormArray[4].value;
+    cfg.camionetaLimit = configFormArray[5].value;
+    saveJson();
+    // location.reload();
+    reloadAll();
+  }else{
+    alertErrorMsj(" Error,las entradas deben ser números y mayores a cero. ") ;
+  }
+  // todavia a mejorar numberControl(configFormArray);
+
+}
+
+/** Recarga la web. debe ser así para que configure los limites y precios de forma correcta. */
+const reloadAll = () =>{
+  // location.reload();
+  // alertSucessMsj(" Cambios guardados y establecidos.");
+}
+
+const setConfigInputsPlaceholder = () =>{
+  input = configFormArray;
+  
+  input[0].value = cfg.autoPrice;
+  input[1].value = cfg.motoPrice;
+  input[2].value = cfg.camionetaPrice;
+  input[3].value = cfg.autoLimit;
+  input[4].value = cfg.motoLimit;
+  input[5].value = cfg.camionetaLimit;
+
+}
+
 /** Se ejecuta al principio para re crear los datos en la local storage */
 let initializeJsonData = () =>{
   vehiclesArray.vehicles.forEach(itemJson => {
@@ -277,9 +375,23 @@ let initializeJsonData = () =>{
     makeItem(itemJson);
   });
   vehiclesArray.registerOut.forEach(regJson =>{ makeItem(regJson,true); });
-  totalDOM.innerHTML = vehiclesArray.money;
+
+  if(vehiclesArray.money != null){
+    totalDOM.innerHTML = vehiclesArray.money;
+  }
+
+  setConfigInputsPlaceholder();
+
+}
+
+/** esta función viene de clickear el icono de config, y activará las dos necesarias */
+const configBoard  = (e) =>{
+  e.preventDefault();
+  openBoard(e,'dashboard');
+  setConfigInputsPlaceholder();
 }
 
 initializeJsonData();
+saveJson();
 
 
