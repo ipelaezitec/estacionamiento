@@ -102,20 +102,20 @@ const setColorFull = (numberDOM)=> { numberDOM.classList.add("color-limit");}
 const unsetColorFull=(numberDOM)=> { numberDOM.classList.remove("color-limit");}
 
 /** Solo crea el <li> y lo agrega al <ul> */
-const makeItem = (element, register=false) =>{
+const makeItem = (element) =>{
   // Ordenados por jerarquia */
-  const listUl   =  register ? document.getElementById('ul-registro') : document.getElementById(`ul-${element.type}`);
+  const listUl   =  document.getElementById(`ul-${element.type}`);
   const flex      = document.createElement('div');
   const vehicleLi= document.createElement('li');
   const plateP  = document.createElement('p');
   const hourP     = document.createElement('p');
 
   vehicleLi.className = "li-reg";
-  flex.className = register ?  "flex-reg" : `flex-reg ${element.patente}`; 
+  flex.className = `flex-reg ${element.patente}`; 
 
   plateP.appendChild(document.createTextNode(element.patente));
 
-  let getTimeTypeNode = register ? document.createTextNode(element.timeOut) : document.createTextNode(element.timeIn);
+  let getTimeTypeNode = document.createTextNode(element.timeIn);
   hourP.appendChild(getTimeTypeNode);  
   flex.appendChild(plateP); 
   flex.appendChild(hourP); 
