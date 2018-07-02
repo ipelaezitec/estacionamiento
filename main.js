@@ -1,14 +1,3 @@
-
-// DUDA JavaScript no se queja si no guardar el return de una función, es mala práctica?
-// DUDA variables const y let
-// DUDA la plata total no se guarda porque no lo puse, deberia?
-// DUDA tratar el asunto de los radios
-// posible mejora : mascara de caracteres
-// posible mejora : Pestañas en vez de botones. 
-
-
-// TODO : ESTABLECER PRECIOS;
-
 let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.getItem('vehicles')) :{"vehicles":[],"registerOut":[],"money": "0",
 "config" : {'motoPrice' : '80' ,
             'autoPrice' : '100' ,
@@ -19,14 +8,12 @@ let vehiclesArray=localStorage.getItem('vehicles') ? JSON.parse(localStorage.get
             'alertLimit' : '2'}};
 
 
-
 const dashboard = document.querySelector(".dashboard");
 const checkin = document.querySelector(".checkin");
 const checkout = document.querySelector(".checkout");
 const config = document.querySelector(".config");
 const modalDOM = document.querySelector('.modal');
 
-// wip
 let configFormArray = document.querySelectorAll('.config-inputs');
 
 let cfg = vehiclesArray.config;
@@ -39,7 +26,6 @@ let motoLimit = cfg.motoLimit;
 let camionetaLimit = cfg.autoLimit;
 
 let alertLimit = cfg.alertLimit;
-
 
 /// Variables modal, deben ser globales si o si.
 let totalMoney;
@@ -66,36 +52,54 @@ const showModal = () =>{ modalDOM.classList.add("is-active");}
 
 const saveJson = () => { localStorage.setItem('vehicles', JSON.stringify(vehiclesArray));}
 
-/** Controla el número renderizado ( el contador y color ) */
-let renderCount = (elementNum,counter=1,) =>{
-  let number =  document.querySelector(`.num-${elementNum.type}`);
-  let radio =  document.querySelector(`.radio-${elementNum.type}`);
-  let numberParsed = parseInt(number.innerHTML)+counter;
+/** Se encarga de renderizar y controlar los contadores. */
+const setCount = (elementNum , counter = 1) =>{
+  let numberDOM =  document.querySelector(`.num-${elementNum.type}`);
+  let radioDOM =  document.querySelector(`.radio-${elementNum.type}`);
   let limite = eval(`${elementNum.type}Limit`);
-  let pushItemFlag = false; // addvehicle necesita este flag para saber si debe agregar value al Json 
 
-  /** Cambia color si esta cerca del limite especificado. */
-  if (numberParsed <= limite ) {
-    number.innerHTML = numberParsed;
-    pushItemFlag = true;
-    let remainingSpace = Math.abs(numberParsed - limite);
-    if ( remainingSpace <= alertLimit) {
-      number.classList.add("color-alert");
-    }else{
-      number.classList.remove("color-alert");
-    }
-  }
-  /** Cambia el color si está en el limite */
-  if (numberParsed + counter > limite) {
-    number.classList.add("color-limit");
-    radio.classList.add("hidden");
+  let number= parseInt(numberDOM.innerHTML) + counter;
+  let pushItemFlag = false;
+  
+  pushItemFlag = setColorLimit(numberDOM,number,limite);
+  let isFull = checkFullLimit(number,limite);
+
+  if (isFull){
+    setColorFull(numberDOM);
+    disableRadio(radioDOM);
   }else{
-    radio.classList.remove("hidden"); // esto o :  radio.disabled = false; deberia probar radio.checked = false (ni idea si funciona)
-    number.classList.remove("color-limit");
+    unsetColorFull(numberDOM);
+    enableRadio(radioDOM);
   }
   return pushItemFlag;
 }
 
+/** Le da color al número si esta cerca del límite. */
+const setColorLimit = (numberDOM,number,limite) =>{
+  let flag = false;
+  let numberClass = numberDOM.classList;
+  if (number <= limite ) {
+    numberDOM.innerHTML = number;
+    let remainingSpace = Math.abs(number - limite);
+    (remainingSpace <= alertLimit) ?  numberClass.add("color-alert") : numberClass.remove("color-alert");
+    
+    flag = true;
+  }
+  return flag;
+}
+
+/** Comprueba si esta a full los espacios. */
+const checkFullLimit = (number,limite) =>{
+  let isFull;
+  isFull = (number + 1 > limite) ? true:false;
+  return isFull;
+}
+
+/// Funciones relacionadas al momento de llegar al limite de espacio.
+const disableRadio = (radioDOM) => { radioDOM.classList.add("hidden"); }
+const enableRadio  = (radioDOM) => { radioDOM.classList.remove("hidden");}
+const setColorFull = (numberDOM)=> { numberDOM.classList.add("color-limit");}
+const unsetColorFull=(numberDOM)=> { numberDOM.classList.remove("color-limit");}
 
 /** Solo crea el <li> y lo agrega al <ul> */
 const makeItem = (element, register=false) =>{
@@ -111,126 +115,106 @@ const makeItem = (element, register=false) =>{
 
   plateP.appendChild(document.createTextNode(element.patente));
 
-  getTimeTypeNode = register ? document.createTextNode(element.timeOut) : document.createTextNode(element.timeIn);
+  let getTimeTypeNode = register ? document.createTextNode(element.timeOut) : document.createTextNode(element.timeIn);
   hourP.appendChild(getTimeTypeNode);  
   flex.appendChild(plateP); 
   flex.appendChild(hourP); 
   vehicleLi.appendChild(flex); 
   listUl.appendChild(vehicleLi); 
   
-  return
+  return;
 }
 
 /** Simplemente una alerta de error  */
 
-const alertMsjOut = (patente,text) =>{
-  let msj = document.querySelector(".notification-regout");
-  msj.classList.remove("hidden");
-  msj.innerHTML=`${patente} ${text}`;
+const alertRegOut = (text) =>{
+  let itemDOM = document.querySelector(".notification-regout");
+  showAlert(text,itemDOM);
+}
+
+const alertRegIn = (text) =>{
+  let itemDOM = document.querySelector(".notification-regin");
+  showAlert(text,itemDOM);
+}
+
+const alertConfig = (text) =>{
+  let itemDOM = document.querySelector(".notificacion-error");
+  showAlert(text,itemDOM);
+}
+
+const showAlert = (text,itemDOM) =>{
+  let itemDOMclass = itemDOM.classList; 
+  itemDOMclass.remove("hidden");
+  itemDOM.innerHTML=`${text}`;
   let timeDisappear = 3000;
-  setTimeout(function(){
-  msj.classList.add("hidden");
-  },
-  timeDisappear);
+  setTimeout(function(){ itemDOMclass.add("hidden"); },timeDisappear);
 }
-
-const alertMsj = (patente,text) =>{
-  let msj = document.querySelector(".notification-regin");
-  msj.classList.remove("hidden");
-  msj.innerHTML=`${patente} ${text}`;
-  let timeDisappear = 4000;
-  setTimeout(function(){
-  msj.classList.add("hidden");
-  },
-  timeDisappear);
-}
-
-const alertErrorMsj = (text) => {
-
-  let msj = document.querySelector(".notificacion-error");
-  msj.classList.remove("hidden");
-  msj.innerHTML=`${text}`;
-  let timeDisappear = 4000;
-  setTimeout(function(){
-  msj.classList.add("hidden");
-  },
-  timeDisappear);
-}
-
-const alertSucessMsj = (text) => {
-  console.log("checkeo de sucess");
-  let msj = document.querySelector(".notificacion-ok");
-  msj.classList.remove("hidden");
-  msj.innerHTML=`${text}`;
-  let timeDisappear = 4000;
-  setTimeout(function(){
-  msj.classList.add("hidden");
-  },
-  timeDisappear);
-}
-
-
+// let msj = document.querySelector(".notificacion-ok");
 
 /** Verifica si la placa ya existe */
 let checkPlate = (plateInput) => {
-  let plateExistFlag = true;
+  let exists = true;
   for (let i = 0; i < vehiclesArray.vehicles.length; i++) {
-    
     const plateDB = vehiclesArray.vehicles[i].patente;
     if (plateInput == plateDB) {
-      plateExistFlag = false;
+      exists = false;
       break;
     }
   }
+  return exists;
+}
 
-  console.log("plateflag : "+plateExistFlag);
-  return plateExistFlag;
+/** Establece todos los datos que corresponden. */
+const setData = (vehicleObject) =>{
+  makeItem(vehicleObject);
+  vehiclesArray.vehicles.push(vehicleObject);
+  saveJson();
+  return;
+}
+
+const clearInput = (inputDOM) =>{
+  inputDOM.value ="";
+  inputDOM.focus();
+  return;
+}
+
+/** En su ruta óptima toma los datos y los guarda. */
+const setInputValues = (plateInputDOM) => {
+  let radioInput = document.querySelector('input[name=tipo]:checked').value;
+  let timeIn     = moment().format("H:mm");
+  let vehicleDataObject = {"patente":plateInputDOM.value ,"type":radioInput, "timeIn": timeIn};
+  
+  let isNotFull = setCount(vehicleDataObject);
+  if (isNotFull) {
+    setData(vehicleDataObject);
+    clearInput(plateInputDOM);
+  }else{
+    alertRegIn("Debe seleccionar tipo de vehículo.")
+  }
+  return;
 }
 
 /** Function activada por el boton de "Guardar" en el Ingreso de vehiculo */
 let saveVehicle = (event) =>{
   event.preventDefault();
+  let plateInputDOM = document.getElementById("patente"); 
 
-  let plateInput = document.getElementById("patente"); 
-
-  if (checkPlate(plateInput.value)){
-    let radioInput = document.querySelector('input[name=tipo]:checked').value;
-    let timeIn     = moment().format("H:mm");
-  
-    let dataFormatIn = {"patente":plateInput.value ,"type":radioInput, "timeIn": timeIn};
-    
-    let pushItemflag = renderCount(dataFormatIn);
-    if (pushItemflag) {
-      makeItem(dataFormatIn);
-      vehiclesArray.vehicles.push(dataFormatIn);
-      saveJson();
-
-      plateInput.value="";
-      plateInput.focus();
-    }else{
-      alertMsj(" ","Debe seleccionar tipo de vehículo.")
-    }
+  if (checkPlate(plateInputDOM.value)){
+    setInputValues(plateInputDOM);
   }else{
-    alertMsj(plateInput.value,"Ya está en la lista.");
+    alertRegIn(plateInputDOM.value +" Ya está en la lista.");
   }
-
-
 }
 
 /** Calcula la cantidad de dinero según el tiempo*/
 const getTotalMoney = (timeIn,timeOut,type) =>{
-  /* moment.js  Revisar <- */
+  /* moment.js  totalmente mejorable <- */
   let start = moment.duration(timeIn, "HH:mm");
   let end = moment.duration(timeOut, "HH:mm");
   let diff = end.subtract(start);
 
-  // supuestamente pretende redondear para cobrar
   let hours = diff.hours();
-  if (diff.minutes() < 31){
-    hours = hours+0.5;
-  }else{
-    hours = hours+1;
-  }
+  hours = (diff.minutes() < 31) ? hours+0.5 :  hours+1;
   
   totalMoney = hours * eval(`${type}Price`);
 
@@ -248,6 +232,22 @@ const chargeAndShowModal = (dataJson) =>{
   textMoney.innerHTML = "$ "+totalMoney;
 }
 
+const setRegister = (vehicle,index) =>{
+  let tipo = vehicle.type ;  
+  let timeIn = vehicle.timeIn ; 
+  let timeOut = moment().format("H:mm");
+
+  dataFormatOutJson ={"patente" : plateInputReg.value,
+                      "type" : tipo,
+                      "timeOut" : timeOut ,
+                      "timeIn":timeIn};
+  auxIndex= index;
+  
+  // despues de encontrar y guardar datos de salida del vehiculo,cargará el modal.
+  // luego el "Confirmar" decidirá si la información es registrada o no.
+  chargeAndShowModal(dataFormatOutJson);
+}
+
 /** Evento al apretar para la salida de vehiculo.  */
 const registerVehicle = (event) => {
   event.preventDefault();
@@ -255,32 +255,19 @@ const registerVehicle = (event) => {
   let allVehiclesJson = vehiclesArray.vehicles;
   let flag = false;
 
-
   if  (allVehiclesJson.length == 0){
-    alertMsjOut(plateInputReg.value," no está registrado en el ingreso");
+    alertRegOut(plateInputReg.value+" no está registrado en el ingreso");
   }else{ 
     for (let index = 0; index < allVehiclesJson.length; index++) {
       const vehicle = allVehiclesJson[index];
       if (vehicle.patente == plateInputReg.value){ 
         flag = true;
-        let tipo = vehicle.type ;  
-        let timeIn = vehicle.timeIn ; 
-        let timeOut = moment().format("H:mm");
-
-        dataFormatOutJson ={"patente" : plateInputReg.value,
-                            "type" : tipo,
-                            "timeOut" : timeOut ,
-                            "timeIn":timeIn};
-        auxIndex= index;
-        
-        // despues de encontrar y guardar datos de salida del vehiculo,cargará el modal.
-        // luego el "Confirmar" decidirá si la información es registrada o no.
-        chargeAndShowModal(dataFormatOutJson);
+        setRegister(vehicle,index);
         break;
       } 
     }
   }
-  if (!flag){ alertMsjOut(plateInputReg.value,"no está registrado en el ingreso"); }
+  if (!flag){ alertRegOut(plateInputReg.value + " no está registrado en el ingreso"); }
 }
 
 /** Botón confirmar */
@@ -297,7 +284,7 @@ let confirmButtonModalRegister= () =>{
 
 /** Borra y Actualiza los datos de renderizado y del localStorage */
 let deleteAndRegisterItem = () =>{
-  renderCount(dataFormatOutJson,-1);
+  setCount(dataFormatOutJson,-1);
   makeItem(dataFormatOutJson,true); 
   
   let liToDelete = document.querySelector(`.${dataFormatOutJson.patente}`);
@@ -316,20 +303,14 @@ const numberControl = () =>{
   flagError = true;
   for (let i = 0; i < configFormArray.length; i++) {
     const elementInput = (configFormArray[i].value);
-    if (elementInput < 0){
+    if (elementInput < 0 || isNaN(elementInput) || !Number.isInteger(Number(elementInput)) || elementInput.length<1 ){
       flagError = false;
-    }
-    if (isNaN(elementInput)){
-      flagError = false;
-    }
-    console.log(Number.isInteger(Number(elementInput)));
-    if (!Number.isInteger(Number(elementInput))){
-      flagError = false;
-    }
+    } 
   }
 
   return flagError;
 }
+
 
 const saveConfig = () =>{
   event.preventDefault();
@@ -341,47 +322,39 @@ const saveConfig = () =>{
     cfg.motoLimit = configFormArray[4].value;
     cfg.camionetaLimit = configFormArray[5].value;
     saveJson();
-    // location.reload();
     reloadAll();
   }else{
-    alertErrorMsj(" Error,las entradas deben ser números y mayores a cero. ") ;
+    alertConfig(" Error,las entradas deben ser números y mayores a cero. ") ;
   }
-  // todavia a mejorar numberControl(configFormArray);
-
 }
 
 /** Recarga la web. debe ser así para que configure los limites y precios de forma correcta. */
 const reloadAll = () =>{
-  // location.reload();
-  // alertSucessMsj(" Cambios guardados y establecidos.");
+  location.reload();
 }
 
+/** Renderiza valores actuales en la configuración */
 const setConfigInputsPlaceholder = () =>{
   input = configFormArray;
-  
   input[0].value = cfg.autoPrice;
   input[1].value = cfg.motoPrice;
   input[2].value = cfg.camionetaPrice;
   input[3].value = cfg.autoLimit;
   input[4].value = cfg.motoLimit;
   input[5].value = cfg.camionetaLimit;
-
 }
 
 /** Se ejecuta al principio para re crear los datos en la local storage */
 let initializeJsonData = () =>{
   vehiclesArray.vehicles.forEach(itemJson => {
-    renderCount(itemJson); // xjfw2
+    setCount(itemJson); // xjfw2
     makeItem(itemJson);
   });
   vehiclesArray.registerOut.forEach(regJson =>{ makeItem(regJson,true); });
-
   if(vehiclesArray.money != null){
     totalDOM.innerHTML = vehiclesArray.money;
   }
-
   setConfigInputsPlaceholder();
-
 }
 
 /** esta función viene de clickear el icono de config, y activará las dos necesarias */
@@ -393,5 +366,3 @@ const configBoard  = (e) =>{
 
 initializeJsonData();
 saveJson();
-
-
