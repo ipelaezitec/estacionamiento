@@ -125,6 +125,30 @@ const makeItem = (element, register=false) =>{
   return;
 }
 
+// WIP
+const makeItemRegister = (element) =>{
+  // Ordenados por jerarquia */
+  const listUl   =  document.getElementById('ul-registro');
+  const flex      = document.createElement('div');
+  const vehicleLi= document.createElement('li');
+  const plateP  = document.createElement('p');
+  const hourP     = document.createElement('p');
+
+  vehicleLi.className = "li-reg";
+  flex.className = "flex-reg"; 
+
+  plateP.appendChild(document.createTextNode(element.patente+' '+element.type ));
+
+  let getMoney = document.createTextNode(element.totalMoney);
+  hourP.appendChild(getMoney);  
+  flex.appendChild(plateP); 
+  flex.appendChild(hourP); 
+  vehicleLi.appendChild(flex); 
+  listUl.appendChild(vehicleLi); 
+  
+  return;
+}
+
 /** Simplemente una alerta de error  */
 
 const alertRegOut = (text) =>{
@@ -285,11 +309,17 @@ let confirmButtonModalRegister= () =>{
 /** Borra y Actualiza los datos de renderizado y del localStorage */
 let deleteAndRegisterItem = () =>{
   setCount(dataFormatOutJson,-1);
-  makeItem(dataFormatOutJson,true); 
+
+  // wip 
+  
+  dataFormatOutJson['totalMoney'] = '  $ '+totalMoney;
+
+  makeItemRegister(dataFormatOutJson,true); 
   
   let liToDelete = document.querySelector(`.${dataFormatOutJson.patente}`);
   liToDelete.parentElement.remove();
   
+
   vehiclesArray.registerOut.push(dataFormatOutJson);
   vehiclesArray.vehicles.splice(auxIndex,1);
   saveJson();
@@ -298,6 +328,7 @@ let deleteAndRegisterItem = () =>{
   plateInputReg.focus();
 }
 
+// seccion de configuración
 
 const numberControl = () =>{
   flagError = true;
@@ -310,7 +341,6 @@ const numberControl = () =>{
 
   return flagError;
 }
-
 
 const saveConfig = () =>{
   event.preventDefault();
@@ -344,13 +374,15 @@ const setConfigInputsPlaceholder = () =>{
   input[5].value = cfg.camionetaLimit;
 }
 
+
+
 /** Se ejecuta al principio para re crear los datos en la local storage */
 let initializeJsonData = () =>{
   vehiclesArray.vehicles.forEach(itemJson => {
     setCount(itemJson); // xjfw2
     makeItem(itemJson);
   });
-  vehiclesArray.registerOut.forEach(regJson =>{ makeItem(regJson,true); });
+  vehiclesArray.registerOut.forEach(regJson =>{ makeItemRegister(regJson,true); });
   if(vehiclesArray.money != null){
     totalDOM.innerHTML = vehiclesArray.money;
   }
