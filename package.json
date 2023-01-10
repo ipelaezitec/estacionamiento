@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/ipelaezitec/estacionamiento#readme",
   "dependencies": {
-    "live-server": "^1.2.0",
+    "live-server": "^1.2.2",
     "moment": "^2.22.2"
   }
 }
